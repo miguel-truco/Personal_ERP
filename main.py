@@ -1,6 +1,7 @@
 import string
 categorias_validas = ["Mini Motos", "Figuras", "Guantes"] 
 escalas_validas = ["1:18", "1:12" ]
+menu_list = ["1 - Agregar producto", "2 - Modificar producto", "3 - Eliminar producto", "4 - Registrar venta"]
 
 def validar_atributo_estricto(atributo: str, opciones_validas: frozenset) -> str:
     mensaje_consola = f"Lista de valores válidos para el atributo {atributo}: {', '.join(opciones_validas)}\nIngresa el atributo {atributo}: "
@@ -11,7 +12,7 @@ def validar_atributo_estricto(atributo: str, opciones_validas: frozenset) -> str
         else:
             return verificar_categoria    
 
-def validar_atributo_alfabetico(atributo: str, caracteres_permitidos : frozenset) -> str:
+def validar_atributo_alfabetico(atributo: str, caracteres_permitidos: frozenset) -> str:
     mensaje_consola = f"Ingresa el atributo {atributo} del producto: "
     while True:
         verificar_atributo = input(mensaje_consola).strip().lower().title()
@@ -34,38 +35,54 @@ def validar_atributo_numerico(atributo: str, conversion_tipo: type = float):
                 mensaje_consola = f"Error, ingresa un numero entero para {atributo}: "
             else:
                 mensaje_consola = f"Error, ingresa valor válido para {atributo}: "
-def crear_producto() -> dict:
+def generar_atributos() -> dict:
 
-    formato_producto = {"categoría": "",
+    formato_atributos = {"categoría": "",
                          "nombre": "", 
                          "color": "", 
                          "escala": "", 
                          "precio": 0, 
                          "unidades": 0,}
     
-    formato_producto["categoría"] = validar_atributo_estricto("categoría", frozenset(categorias_validas))
-    if formato_producto["categoría"] == "Mini Motos":
-        formato_producto["nombre"] = validar_atributo_alfabetico("nombre", frozenset(string.ascii_letters + string.digits + " -"))
-        formato_producto["escala"] = validar_atributo_estricto("escala", frozenset(escalas_validas))
+    formato_atributos["categoría"] = validar_atributo_estricto("categoría", frozenset(categorias_validas))
+    if formato_atributos["categoría"] == "Mini Motos":
+        formato_atributos["nombre"] = validar_atributo_alfabetico("nombre", frozenset(string.ascii_letters + string.digits + " -"))
+        formato_atributos["escala"] = validar_atributo_estricto("escala", frozenset(escalas_validas))
     else:
-        formato_producto["nombre"] = validar_atributo_alfabetico("nombre", frozenset(string.ascii_letters))
-        formato_producto["escala"] = "N/A"
-    formato_producto["color"] = validar_atributo_alfabetico("color", frozenset(string.ascii_letters + "/"))
-    formato_producto["precio"] = validar_atributo_numerico("precio")
-    formato_producto["unidades"] = validar_atributo_numerico("unidades", conversion_tipo = int)
-    return formato_producto
+        formato_atributos["nombre"] = validar_atributo_alfabetico("nombre", frozenset(string.ascii_letters))
+        formato_atributos["escala"] = "N/A"
+    formato_atributos["color"] = validar_atributo_alfabetico("color", frozenset(string.ascii_letters + "/"))
+    formato_atributos["precio"] = validar_atributo_numerico("precio")
+    formato_atributos["unidades"] = validar_atributo_numerico("unidades", conversion_tipo = int)
+    return formato_atributos
 
 def generar_sku(atributos: dict) -> str:
     sku = (atributos["categoría"][:2] + atributos["nombre"][:2] + atributos["color"][:2]).upper()
     return sku
 
-def formatear_pedido():
-    productos_existentes = {}
-    productos_nuevos = {}
-    atributos_articulo = crear_producto()
-    sku = generar_sku(atributos_articulo)
-    productos_nuevos[sku] = atributos_articulo
-    print(productos_nuevos)
+def producto_terminado(sku: str, atributos: dict) -> dict:
+    return {sku:atributos}
+
+def menu(options: frozenset):
+    
+    print("Menú de opciones:\n" + "\n".join(options))
+    selection = input("Selecciona una opción del menú de opciones: ")
+    if not selection in map(lambda v: options[v], options):
+        while True:
+            selection = input("Ingresa una opción válida: ")
+            if selection in options: break
     pass
 
-formatear_pedido()
+"""def formatear_pedido():
+    productos_existentes = []
+    productos_nuevos = []
+    while True:
+
+    atributos_articulo = generar_atributos()
+    sku = generar_sku(atributos_articulo)
+    nuevo_producto = producto_terminado(sku, atributos_articulo)
+    print(productos_nuevos)
+    pass"""
+
+#formatear_pedido()
+menu(menu_list)
