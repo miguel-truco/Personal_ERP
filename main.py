@@ -1,7 +1,10 @@
 import string
 categorias_validas = ["Mini Motos", "Figuras", "Guantes"] 
 escalas_validas = ["1:18", "1:12" ]
-menu_list = ["1 - Agregar producto", "2 - Modificar producto", "3 - Eliminar producto", "4 - Registrar venta"]
+menu_list = ["1 - Agregar Producto", 
+             "2 - Modificar Producto", 
+             "3 - Eliminar Producto", 
+             "4 - Registrar Venta"]
 
 def validar_atributo_estricto(atributo: str, opciones_validas: frozenset) -> str:
     mensaje_consola = f"Lista de valores válidos para el atributo {atributo}: {', '.join(opciones_validas)}\nIngresa el atributo {atributo}: "
