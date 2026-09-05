@@ -32,14 +32,13 @@ def test_menu_2(options: frozenset):
 
 def test_menu_3(options: frozenset):
     message = "Ingresa una opción: "
-    message_error = "Ingresa una opción válida del menú: "
+    message_error = "ERROR: Opción inválida"
     print("Menú de opciones:\n" + "\n".join(options))
-    selection = input(message).strip().title()
     while True:
+            selection = input(message).strip().title()
             if selection in (digit[:1] for digit in options) or selection in (text[4:] for text in options): return selection
-            else:
-                selection = input(message_error).strip().title()
+            print(message_error)
     
-print(test_menu_1(menu_list))
-print(test_menu_2(menu_list))
+#print(test_menu_1(menu_list))
+#print(test_menu_2(menu_list))
 print(test_menu_3(menu_list))
