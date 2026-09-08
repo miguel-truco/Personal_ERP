@@ -1,10 +1,10 @@
 import string
 categorias_validas = ["Mini Motos", "Figuras", "Guantes"] 
 escalas_validas = ["1:18", "1:12" ]
-menu_list = ["1 - Agregar Producto", 
+menu_list = frozenset(["1 - Agregar Producto", 
              "2 - Modificar Producto", 
              "3 - Eliminar Producto", 
-             "4 - Registrar Venta"]
+             "4 - Registrar Venta"])
 
 def validar_atributo_estricto(atributo: str, opciones_validas: frozenset) -> str:
     mensaje_consola = f"Lista de valores válidos para el atributo {atributo}: {', '.join(opciones_validas)}\nIngresa el atributo {atributo}: "
@@ -67,25 +67,24 @@ def producto_terminado(sku: str, atributos: dict) -> dict:
     return {sku:atributos}
 
 def menu(options: frozenset):
-    
-    print("Menú de opciones:\n" + "\n".join(options))
-    selection = input("Selecciona una opción del menú de opciones: ")
-    if not selection in map(lambda v: options[v], options):
-        while True:
-            selection = input("Ingresa una opción válida: ")
-            if selection in options: break
-    pass
+    message = "Ingresa una opción: "
+    message_error = "ERROR: Opción inválida"
+    valid_options = {val_opt.strip() for opt in options for val_opt in opt.split("-", maxsplit=1)}
+    print("Menú de opciones:\n" + "\n".join(sorted(options)))
+    while True:
+            selection = input(message).strip().title()
+            if selection in valid_options: return selection 
+            print(message_error)
 
-"""def formatear_pedido():
+def formato():
     productos_existentes = []
     productos_nuevos = []
     while True:
-
-    atributos_articulo = generar_atributos()
-    sku = generar_sku(atributos_articulo)
-    nuevo_producto = producto_terminado(sku, atributos_articulo)
-    print(productos_nuevos)
-    pass"""
-
-#formatear_pedido()
-menu(menu_list)
+        seleccion = menu(menu_list)
+        #atributos_articulo = generar_atributos()
+        #sku = generar_sku(atributos_articulo)
+        #nuevo_producto = producto_terminado(sku, atributos_articulo)
+        print(seleccion)
+        print(productos_nuevos)
+        pass
+formato()
