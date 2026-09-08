@@ -33,17 +33,12 @@ def test_menu_2(options: frozenset):
 def test_menu_3(options: frozenset):
     message = "Ingresa una opción: "
     message_error = "ERROR: Opción inválida"
-    #gen_digit_menu = (digit.split("-", maxsplit=1)[0].strip() for digit in options)
-    #gen_text_menu = (text.split("-", maxsplit=1)[1].strip() for text in options)
     valid_options = {val_opt.strip() for opt in options for val_opt in opt.split("-", maxsplit=1)}
     print("Menú de opciones:\n" + "\n".join(sorted(options)))
     while True:
             selection = input(message).strip().title()
             if selection in valid_options: return selection 
             print(message_error)
-
-def test_drill(menu_list):
-    return {valid_item[0].strip(): valid_item[1].strip() for item in menu_list if (valid_item:= item.split("-", maxsplit=2))}
 
 #print(test_menu_1(menu_list))
 #print(test_menu_2(menu_list))
