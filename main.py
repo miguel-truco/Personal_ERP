@@ -1,13 +1,13 @@
 import string
-categorias_validas = ["Mini Motos", "Figuras", "Guantes"] 
-escalas_validas = ["1:18", "1:12" ]
+categorias_validas = frozenset(["Mini Motos", "Figuras", "Guantes"]) 
+escalas_validas = frozenset(["1:18", "1:12" ])
 menu_list = frozenset(["1 - Agregar Producto", 
              "2 - Modificar Producto", 
              "3 - Eliminar Producto", 
              "4 - Registrar Venta"])
 
 def validar_atributo_estricto(atributo: str, opciones_validas: frozenset) -> str:
-    mensaje_consola = f"Lista de valores válidos para el atributo {atributo}: {', '.join(opciones_validas)}\nIngresa el atributo {atributo}: "
+    mensaje_consola = f"Lista de valores válidos para el atributo {atributo}: {', '.join(sorted(opciones_validas))}\nIngresa el atributo {atributo}: "
     while True:
         verificar_categoria = input(mensaje_consola).strip().lower().title()
         if verificar_categoria not in opciones_validas: 
@@ -47,10 +47,10 @@ def generar_atributos() -> dict:
                          "precio": 0, 
                          "unidades": 0,}
     
-    formato_atributos["categoría"] = validar_atributo_estricto("categoría", frozenset(categorias_validas))
+    formato_atributos["categoría"] = validar_atributo_estricto("categoría", categorias_validas)
     if formato_atributos["categoría"] == "Mini Motos":
         formato_atributos["nombre"] = validar_atributo_alfabetico("nombre", frozenset(string.ascii_letters + string.digits + " -"))
-        formato_atributos["escala"] = validar_atributo_estricto("escala", frozenset(escalas_validas))
+        formato_atributos["escala"] = validar_atributo_estricto("escala", escalas_validas)
     else:
         formato_atributos["nombre"] = validar_atributo_alfabetico("nombre", frozenset(string.ascii_letters))
         formato_atributos["escala"] = "N/A"
@@ -63,7 +63,7 @@ def generar_sku(atributos: dict) -> str:
     sku = (atributos["categoría"][:2] + atributos["nombre"][:2] + atributos["color"][:2]).upper()
     return sku
 
-def producto_terminado(sku: str, atributos: dict) -> dict:
+def crear_producto(sku: str, atributos: dict) -> dict:
     return {sku:atributos}
 
 def menu(options: frozenset):
@@ -80,11 +80,15 @@ def formato():
     productos_existentes = []
     productos_nuevos = []
     while True:
-        seleccion = menu(menu_list)
+        election = menu(menu_list)
+        match election:
+            case "1" | "Agregar Producto":
+                crear_producto(generar_sku, generar_atributos)
+
         #atributos_articulo = generar_atributos()
         #sku = generar_sku(atributos_articulo)
         #nuevo_producto = producto_terminado(sku, atributos_articulo)
-        print(seleccion)
+        print(election)
         print(productos_nuevos)
         pass
 formato()
