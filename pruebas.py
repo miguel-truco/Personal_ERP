@@ -40,6 +40,17 @@ def test_menu_3(options: frozenset):
             if selection in valid_options: return selection 
             print(message_error)
 
+class GestorArchivos:
+    def __enter__(self):
+        return self
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        return print("Cerrando recursos")
+
+with GestorArchivos() as test:
+     print(test)
+
+
+
 #print(test_menu_1(menu_list))
 #print(test_menu_2(menu_list))
-print(test_menu_3(menu_list))
+#print(test_menu_3(menu_list))
